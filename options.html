@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Options | Like on Git</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<div class="columns">
+
+    <div class="header">
+        <h1>Like on Git <span class="muted">Options</span></h1>
+    </div>
+
+    <div class="options-content">
+
+        <p class="quote-item border-bottom">Make sure to fill these fields with correct credentials. Otherwise you will
+            not be able to use this extension.</p>
+
+        <h3 style="margin: 30px 5px 10px;">Repo Owner</h3>
+        <input type="text" name="owner" id="owner" placeholder="idnan" class="git_token btn" style="width: 300px;"/>
+        <h3 style="margin: 30px 5px 10px;">Repo Name</h3>
+        <input type="text" name="repo" id="repo" placeholder="like-on-git" class="git_token btn" style="width: 300px;"/>
+        <h3 style="margin: 30px 5px 10px;">Email</h3>
+        <input type="text" name="email" id="email" placeholder="mahradnan@hotmail.com" class="git_token btn" style="width: 300px;"/>
+        <h3 style="margin: 30px 5px 10px;">Readme File Path (don't include repo name in path)</h3>
+        <input type="text" name="path" id="path" placeholder="README.md" class="git_token btn" style="width: 300px;"/>
+        <h3 style="margin: 30px 5px 10px;">Add API Token (<a
+                href="https://github.com/settings/tokens" class="underline" target="_blank">generate a token</a>)</h3>
+        <input type="text" name="git_token" id="token" class="git_token btn" style="width: 300px;"/>
+        <a href="#" class="btn btn-save">Save</a>
+    </div>
+
+</div>
+
+<script src="scripts/jquery.min.js"></script>
+<script src=scripts/options.js></script>
+
+</body>
+</html>

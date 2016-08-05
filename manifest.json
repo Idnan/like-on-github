@@ -1,0 +1,30 @@
+{
+    "name": "Like on Git",
+    "short_name": "LikeOnGit",
+    "description": "Use this extension to save your links to your GitHub repo.",
+    "version": "1.0",
+    "background": {
+        "scripts": [
+            "scripts/jquery.min.js",
+            "scripts/widget.js"
+        ]
+    },
+    "icons": {
+        "16": "icons/standard-16.png",
+        "48": "icons/standard-48.png",
+        "64": "icons/standard-64.png",
+        "128": "icons/standard-128.png"
+    },
+    "permissions": [
+        "tabs",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "browser_action": {
+        "default_title": "Like on Git",
+        "default_icon": "icons/standard-16.png"
+    },
+    "manifest_version": 2,
+    "homepage_url": "http://github.com/idnan",
+    "options_page": "options.html"
+}
