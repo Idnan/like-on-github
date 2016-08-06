@@ -14,7 +14,7 @@ It makes it seem-less to create "today-i-read" repository where you put all the 
 - Right click the extension icon (thumb icon) in the bar and click the options page
 - At the options page, add the specified details
 
-  ![Options Page](http://i.imgur.com/qaYtVWm.png)
+  ![Options Page](http://i.imgur.com/0cdkfKx.png)
 
 - Voilla! You are all set.
 
