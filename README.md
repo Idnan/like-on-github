@@ -12,16 +12,22 @@ It makes it seem-less to create "today-i-read" repository where you put all the 
 
 - First things first, create a repository to which you would want the links to the liked content be added
 - Right click the extension icon (thumb icon) in the bar and click the options page
-  ![Options Page](http://i.imgur.com/Axw4115.png)
 - At the options page, add the specified details
+
   ![Options Page](http://i.imgur.com/qaYtVWm.png)
+
 - Voilla! You are all set.
 
 ## How to Use
 
+#### Click the "Thumb" button on any page that you like
+
 ![How to Use](http://i.imgur.com/Yczjy7e.png)
 
+#### Liked content will be there in your linked repository
+
 ![Liked Content](http://i.imgur.com/C050TKB.png)
+
 
 ## Contributions
 
