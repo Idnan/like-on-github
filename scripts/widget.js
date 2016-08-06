@@ -28,13 +28,18 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 encodedContent = response.content,
                 decodedContent = window.atob(encodedContent);
 
+            // If the file is empty
+            if ($.trim(decodedContent) === '') {
+                decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n'
+            }
+
             // append header
             if (!isCurrentDateExists(decodedContent)) {
                 decodedContent += getDateHeader();
             }
 
             // append url
-            decodedContent += "[" + activeTab.title + "](" + activeTab.url + ") <br />";
+            decodedContent += "- [" + activeTab.title + "](" + activeTab.url + ") \n";
 
             // decode content
             encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
@@ -59,6 +64,9 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 },
                 dataType: 'json',
                 data: JSON.stringify(commit),
+                before: function () {
+                    setProcessingIcon();
+                },
                 success: function (response) {
                     setSuccessIcon();
                 },
@@ -90,7 +98,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function getDateHeader() {
-            return "<h3>" + getCurrentDate() + "</h3>";
+            return "###" + getCurrentDate() + '\n';
         }
 
         /**
