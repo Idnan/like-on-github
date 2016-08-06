@@ -16,6 +16,10 @@ It makes it seem-less to create "today-i-read" repository where you put all the 
 
   ![Options Page](http://i.imgur.com/0cdkfKx.png)
 
+- Make sure to select the `repo` option while generating token.
+
+  ![Generate Token Page](http://i.imgur.com/bIUXTiQ.png)
+
 - Voilla! You are all set.
 
 ## How to Use
