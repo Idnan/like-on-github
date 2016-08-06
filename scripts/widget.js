@@ -45,8 +45,8 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 content: encodedContent,
                 message: "New link: " + activeTab.title,
                 committer: {
-                    "name": get('owner'),
-                    "email": get('email')
+                    "name": get('committer_name'),
+                    "email": get('committer_email')
                 }
             };
 

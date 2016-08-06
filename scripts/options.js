@@ -5,7 +5,7 @@
  */
 function Options() {
 
-    var fields = ["token", "path", "email", "repo", "owner"],
+    var fields = ["token", "path", "committer_name", "committer_email", "repo", "owner"],
         quote_item = ".quote-item";
 
     /**
@@ -31,6 +31,7 @@ function Options() {
             });
 
             $(quote_item).html('Woohoo! Setting saved.');
+            window.scrollTo(0, 0);
         });
     };
 

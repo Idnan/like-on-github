@@ -368,3 +368,11 @@ li.public.source {
     margin-top: 30px;
     width: 120px !important;
 }
+
+.small-muted {
+    display: block;
+    position: relative;
+    top: -6px;
+    left: 5px;
+    color: #bfb7b7;
+}
