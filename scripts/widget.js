@@ -98,7 +98,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function getDateHeader() {
-            return "###" + getCurrentDate() + '\n';
+            return "\n###" + getCurrentDate() + '\n';
         }
 
         /**
@@ -128,8 +128,8 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          */
         function monthNames() {
             return [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
             ];
         }
 
