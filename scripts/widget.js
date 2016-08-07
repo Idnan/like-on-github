@@ -118,7 +118,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          */
         function getCurrentDate() {
             var date = new Date();
-            return monthNames()[date.getMonth()] + " " + pad(date.getDay()) + ", " + date.getFullYear();
+            return monthNames()[date.getMonth()] + " " + pad(date.getDate()) + ", " + date.getFullYear();
         }
 
         /**
