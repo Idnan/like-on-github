@@ -75,8 +75,48 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 }
             });
 
-        }).fail(function () {
-            setErrorIcon();
+        }).fail(function (jqXHR, textStatus, error) {
+            if (error === 'Not Found'){
+                var content = '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n'
+                // append header
+                if (!isCurrentDateExists(content)) {
+                    content += getDateHeader();
+                }
+
+                // append url
+                content += "- [" + activeTab.title + "](" + activeTab.url + ") \n";
+                //create the file
+                var init = {
+                  message: "Init",
+                  committer: {
+                    "name": get('committer_name'),
+                    "email": get('committer_email')
+                  },
+                  "content": window.btoa(content)
+                };
+
+                // send commit
+                $.ajax({
+                    method: "PUT",
+                    url: url,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    dataType: 'json',
+                    data: JSON.stringify(init),
+                    before: function () {
+                        setProcessingIcon();
+                    },
+                    success: function (response) {
+                        setSuccessIcon();
+                    },
+                    error: function (error) {
+                        setErrorIcon();
+                    }
+                });
+            }else{
+                setErrorIcon();
+            }
         });
 
         /**
