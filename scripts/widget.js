@@ -34,17 +34,15 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
 
                 // prepare commit
-                const commit = {
+                return {
                     sha: sha,
                     content: encodedContent,
                     message: `New link: ${activeTab.title}`,
                     committer: {
-                        "name": get('committer_name'),
-                        "email": get('committer_email')
+                        'name': get('committer_name'),
+                        'email': get('committer_email')
                     }
                 }
-
-                return commit
             }).then(commit => fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -52,7 +50,6 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 },
                 body: JSON.stringify(commit)
             }))
-            .then(res => res.json())
             .then(success => setSuccessIcon())
             .catch(error => setErrorIcon())
 
@@ -63,7 +60,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function get(val) {
-            return localStorage.getItem(val) ? localStorage.getItem(val) : ""
+            return localStorage.getItem(val) ? localStorage.getItem(val) : ''
         }
 
         /**
@@ -72,7 +69,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function getDateHeader() {
-            return "\n### " + getCurrentDate() + '\n';
+            return `\n### ${getCurrentDate()} \n`;
         }
 
         /**
@@ -102,8 +99,8 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          */
         function monthNames() {
             return [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
             ];
         }
 
@@ -114,21 +111,21 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function pad(n) {
-            return (n < 10) ? ("0" + n) : n;
+            return (n < 10) ? ('0' + n) : n;
         }
 
         /**
          * Set default icon
          */
         function setDefaultIcon() {
-            sleep(1000).then(() => chrome.browserAction.setIcon({ path: "icons/standard-16.png" }));
+            sleep(1000).then(() => chrome.browserAction.setIcon({ path: 'icons/standard-16.png' }));
         }
 
         /**
          * Set success icon
          */
         function setSuccessIcon() {
-            chrome.browserAction.setIcon({ path: "icons/check-mark.png" });
+            chrome.browserAction.setIcon({ path: 'icons/check-mark.png' });
             setDefaultIcon()
         }
 
@@ -136,7 +133,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * Set error icon
          */
         function setErrorIcon() {
-            chrome.browserAction.setIcon({ path: "icons/cross-mark.png" });
+            chrome.browserAction.setIcon({ path: 'icons/cross-mark.png' });
             setDefaultIcon();
         }
 

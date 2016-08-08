@@ -22,8 +22,8 @@ function Options() {
     const get = value => localStorage.getItem(value) ? localStorage.getItem(value) : false
 
 
-    const fields = ["token", "path", "committer_name", "committer_email", "repo", "owner"],
-        quote_item = ".quote-item";
+    const fields = ['token', 'path', 'committer_name', 'committer_email', 'repo', 'owner'],
+        quote_item = '.quote-item';
 
     /**
      * Performs the UI bindings
