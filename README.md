@@ -20,7 +20,7 @@ It makes it seem-less to create "today-i-read" repository where you put all the 
 
   ![Generate Token Page](http://i.imgur.com/bIUXTiQ.png)
 
-- Voilla! You are all set.
+- Voila! You are all set.
 
 ## How to Use
 
