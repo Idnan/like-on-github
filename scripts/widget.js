@@ -26,7 +26,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 
             var sha = response.sha,
                 encodedContent = response.content,
-                decodedContent = window.atob(encodedContent);
+                decodedContent = decodeURIComponent(escape(window.atob(encodedContent)));
 
             // If the file is empty
             if ($.trim(decodedContent) === '') {
@@ -98,7 +98,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function getDateHeader() {
-            return "\n###" + getCurrentDate() + '\n';
+            return "\n### " + getCurrentDate() + '\n';
         }
 
         /**
@@ -118,7 +118,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          */
         function getCurrentDate() {
             var date = new Date();
-            return monthNames()[date.getMonth()] + " " + pad(date.getDate()) + ", " + date.getFullYear();
+            return monthNames()[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
         }
 
         /**
