@@ -19,21 +19,16 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                     encodedContent = response.content,
                     decodedContent = window.atob(encodedContent);
 
-                console.log(decodedContent)
                 // If the file is empty
-                if ($.trim(decodedContent) === '') {
+                if (decodedContent.trim().length === 0 )
                     decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n'
-                }
 
                 // append header
-                if (!isCurrentDateExists(decodedContent)) {
+                if (!isCurrentDateExists(decodedContent)) 
                     decodedContent += getDateHeader();
-                }
 
                 // append url
                 decodedContent += `- [${activeTab.title}](${activeTab.url}) \n`
-
-                console.log(decodedContent)
 
                 // decode content
                 encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
@@ -49,9 +44,6 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                     }
                 }
 
-               // setProcessingIcon();
-
-                console.log(JSON.stringify(commit))
                 return commit
             }).then(commit => fetch(url, {
                 method: 'PUT',
@@ -61,10 +53,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                 body: JSON.stringify(commit)
             }))
             .then(res => res.json())
-            .then(success => {
-                console.log(JSON.stringify(succcess))
-                setSuccessIcon()
-            })
+            .then(success => setSuccessIcon())
             .catch(error => setErrorIcon())
 
         /**
@@ -74,10 +63,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function get(val) {
-            if (localStorage.getItem(val)) {
-                return localStorage.getItem(val);
-            }
-            return "";
+            return localStorage.getItem(val) ? localStorage.getItem(val) : ""
         }
 
         /**
@@ -86,7 +72,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function getDateHeader() {
-            return "\n###" + getCurrentDate() + '\n';
+            return "\n### " + getCurrentDate() + '\n';
         }
 
         /**
@@ -164,5 +150,4 @@ chrome.browserAction.onClicked.addListener(function (tab) {
             return new Promise((resolve) => setTimeout(resolve, time));
         }
     });
-
 });

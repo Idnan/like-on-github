@@ -2,10 +2,9 @@
     "name": "Like on Git",
     "short_name": "LikeOnGit",
     "description": "Use this extension to save your links to your GitHub repo.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "background": {
         "scripts": [
-            "scripts/jquery.min.js",
             "scripts/widget.js"
         ]
     },

@@ -12,7 +12,7 @@ function Options() {
      * @param value
      */
     const save = (name, value) => localStorage.setItem(name, value);
-    
+
     /**
      * Get value from storage
      *
@@ -40,12 +40,12 @@ function Options() {
 
             fields.forEach(item => {
                 const value = document.getElementById(item).value.trim()
-                if (value.length) 
+                if (value.length)
                     save(item, value);
             })
 
             let heading = document.getElementsByClassName('quote-item')[0];
-            heading.innerHTML = 'Woohoo! Setting saved' 
+            heading.innerHTML = 'Woohoo! Setting saved'
 
             window.scrollTo(0, 0);
         }
@@ -56,13 +56,9 @@ function Options() {
         /**
          * Initializes the options page
          */
-        init: function () {
-            bindUI();
-        }
+        init: () => bindUI()
     };
 }
 
-$(function () {
-    const options = new Options();
-    options.init();
-});
+const options = new Options();
+options.init();
