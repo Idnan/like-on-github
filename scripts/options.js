@@ -5,71 +5,60 @@
  */
 function Options() {
 
-    var fields = ["token", "path", "committer_name", "committer_email", "repo", "owner"],
-        quote_item = ".quote-item";
-
-    /**
-     * Performs the UI bindings
-     */
-    var bindUI = function () {
-
-        // set value of fields
-        $.each(fields, function (key, item) {
-            if (get(item) !== false) {
-                $('#' + item).val(get(item));
-            }
-        });
-
-        $(document).on('click', '.btn-save', function (e) {
-            e.preventDefault();
-
-            $.each(fields, function (key, item) {
-                var value = $('#' + item).val().trim();
-                if (value) {
-                    save(item, value);
-                }
-            });
-
-            $(quote_item).html('Woohoo! Setting saved.');
-            window.scrollTo(0, 0);
-        });
-    };
-
     /**
      * Save value in user local storage
      *
      * @param name
-     * @param val
+     * @param value
      */
-    var save = function (name, val) {
-        localStorage.setItem(name, val);
-    };
+    const save = (name, value) => localStorage.setItem(name, value);
 
     /**
      * Get value from storage
      *
-     * @param val
+     * @param value
      * @returns {boolean}
      */
-    var get = function (val) {
-        if (localStorage.getItem(val)) {
-            return localStorage.getItem(val);
+    const get = value => localStorage.getItem(value) ? localStorage.getItem(value) : false
+
+
+    const fields = ['token', 'path', 'committer_name', 'committer_email', 'repo', 'owner'],
+        quote_item = '.quote-item';
+
+    /**
+     * Performs the UI bindings
+     */
+    let bindUI = function () {
+
+        fields.filter(item => get(item) !== false)
+            .forEach(item => document.getElementById(item).value = get(item))
+
+        let save_btn = document.getElementsByClassName('btn-save')[0]
+
+        save_btn.onclick = event => {
+            event.preventDefault();
+
+            fields.forEach(item => {
+                const value = document.getElementById(item).value.trim()
+                if (value.length)
+                    save(item, value);
+            })
+
+            let heading = document.getElementsByClassName('quote-item')[0];
+            heading.innerHTML = 'Woohoo! Setting saved'
+
+            window.scrollTo(0, 0);
         }
-        return false;
     };
 
-    return {
 
+    return {
         /**
          * Initializes the options page
          */
-        init: function () {
-            bindUI();
-        }
+        init: () => bindUI()
     };
 }
 
-$(function () {
-    var options = new Options();
-    options.init();
-});
+const options = new Options();
+options.init();

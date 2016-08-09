@@ -376,3 +376,11 @@ li.public.source {
     left: 5px;
     color: #bfb7b7;
 }
+
+h3 {
+    margin: 30px 5px 10px;
+}
+
+input[type=text] {
+    width: 300px;
+}
