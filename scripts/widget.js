@@ -2,33 +2,31 @@
 chrome.browserAction.onClicked.addListener(function (tab) {
 
     // get current selected tab
-    chrome.tabs.query({ active: true, currentWindow: true }, function (arrayOfTabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
 
         const activeTab = arrayOfTabs[0];
 
-        const base_url = 'https://api.github.com/repos'
+        const base_url = 'https://api.github.com/repos';
 
-        const url = `${base_url}/${get('owner')}/${get('repo')}/contents/${get('path')}?access_token=${get('token')}`
-
-        console.log(url)
+        const url = `${base_url}/${get('owner')}/${get('repo')}/contents/${get('path')}?access_token=${get('token')}`;
 
         fetch(url)
             .then(response => response.json())
             .then(response => {
                 let sha = response.sha,
                     encodedContent = response.content,
-                    decodedContent = window.atob(encodedContent);
+                    decodedContent = decodeURIComponent(escape(window.atob(encodedContent)));
 
                 // If the file is empty
-                if (decodedContent.trim().length === 0 )
-                    decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n'
+                if (decodedContent.trim().length === 0)
+                    decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n';
 
                 // append header
-                if (!isCurrentDateExists(decodedContent)) 
+                if (!isCurrentDateExists(decodedContent))
                     decodedContent += getDateHeader();
 
                 // append url
-                decodedContent += `- [${activeTab.title}](${activeTab.url}) \n`
+                decodedContent += `- [${activeTab.title}](${activeTab.url}) \n`;
 
                 // decode content
                 encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
@@ -44,14 +42,14 @@ chrome.browserAction.onClicked.addListener(function (tab) {
                     }
                 }
             }).then(commit => fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(commit)
-            }))
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(commit)
+        }))
             .then(success => setSuccessIcon())
-            .catch(error => setErrorIcon())
+            .catch(error => setErrorIcon());
 
         /**
          * Get value from storage
@@ -60,7 +58,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * @returns {string}
          */
         function get(val) {
-            return localStorage.getItem(val) ? localStorage.getItem(val) : ''
+            return localStorage.getItem(val) ? localStorage.getItem(val) : '';
         }
 
         /**
@@ -89,7 +87,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          */
         function getCurrentDate() {
             const date = new Date();
-            return `${monthNames()[date.getMonth()]} ${pad(date.getDate())}, ${date.getFullYear()}`;
+            return `${monthNames()[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
         }
 
         /**
@@ -118,22 +116,22 @@ chrome.browserAction.onClicked.addListener(function (tab) {
          * Set default icon
          */
         function setDefaultIcon() {
-            sleep(1000).then(() => chrome.browserAction.setIcon({ path: 'icons/standard-16.png' }));
+            sleep(1000).then(() => chrome.browserAction.setIcon({path: 'icons/standard-16.png'}));
         }
 
         /**
          * Set success icon
          */
         function setSuccessIcon() {
-            chrome.browserAction.setIcon({ path: 'icons/check-mark.png' });
-            setDefaultIcon()
+            chrome.browserAction.setIcon({path: 'icons/check-mark.png'});
+            setDefaultIcon();
         }
 
         /**
          * Set error icon
          */
         function setErrorIcon() {
-            chrome.browserAction.setIcon({ path: 'icons/cross-mark.png' });
+            chrome.browserAction.setIcon({path: 'icons/cross-mark.png'});
             setDefaultIcon();
         }
 
