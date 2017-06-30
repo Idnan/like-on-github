@@ -30,20 +30,25 @@
         '<textarea name="comment"></textarea>' +
         '</div>' +
         '<div id="action-btns">' +
-        '<div class="btn btn-primary">Save</div>' +
-        '<div class="btn">Cancel</div>' +
+        '<div class="btn btn-primary" id="logh_btn_save">Save</div>' +
+        '<div class="btn" id="logh_btn_cancel">Cancel</div>' +
         '</div>' +
         '</div>',
 
         // References to DOM elements
-        EX_SWITCHER: '.logh',
+        EX_COTAINER: '.logh',
         EX_INPUT_TITLE: '.logh input[name="title"]',
         EX_INPUT_URL: '.logh input[name="url"]',
         EX_INPUT_COMMENT: '.logh textarea[name="comment"]',
-        EX_CONTAINER: 'body',
+        EX_CONTAINER_BODY: 'body',
+        EX_BTN_SAVE: '.logh #logh_btn_save',
+        EX_BTN_CANCEL: '.logh #logh_btn_cancel',
 
         // Shortcut for activation
         MASTER_KEY: '⌘+⇧+l, ⌃+⇧+l',
+
+        // Key codes for certain actions
+        ESCAPE_KEY: 27,
     };
 
     var Storage = {
@@ -231,6 +236,21 @@
     function LikeOnGithub() {
 
         /**
+         * Gets the action to be performed for the given keycode
+         *
+         * @param keyCode
+         * @returns {*}
+         */
+        function getAction(keyCode) {
+            switch (keyCode) {
+                case Config.ESCAPE_KEY:
+                    return Config.ESCAPING;
+                default:
+                    return false;
+            }
+        }
+
+        /**
          * Appends the tab switcher HTML to the $container
          *
          * @param $container
@@ -246,19 +266,38 @@
         }
 
         /**
+         * Hides the log on github popup
+         */
+        function closePopup() {
+
+            let $container = $(Config.EX_COTAINER);
+
+            if ($container.length === 0) {
+                return false;
+            }
+
+            $(Config.EX_COTAINER).hide();
+            $(Config.EX_INPUT_TITLE).val('');
+            $(Config.EX_INPUT_URL).val('');
+            $(Config.EX_INPUT_COMMENT).val('');
+
+            return true;
+        }
+
+        /**
          * Gets the tab switcher element and makes it visible. If it cannot find the element creates it.
          */
-        function showTabSwitcher() {
-            var $tabSwitcher = $(Config.EX_SWITCHER);
+        function showPopUp() {
+            let $container = $(Config.EX_COTAINER);
 
             // Some pages remove the tab switcher HTML by chance
             // so we check if the tab switcher was found and we re append if it is not found
-            if ($tabSwitcher.length === 0) {
-                appendLikeOnGithubHtml(Config.EX_CONTAINER);
-                $tabSwitcher = $(Config.EX_SWITCHER);
+            if ($container.length === 0) {
+                appendLikeOnGithubHtml(Config.EX_CONTAINER_BODY);
+                $container = $(Config.EX_COTAINER);
             }
 
-            $tabSwitcher.show();
+            $container.show();
         }
 
         return {
@@ -278,9 +317,30 @@
              */
             bindUI: function () {
 
-                // Master key binding for which extension will be enabled
+                // close on escape key
+                $(document).on('keyup', function (e) {
+                    if (e.keyCode === Config.ESCAPE_KEY) {
+                        closePopup();
+                    }
+                });
+
+                // if clicked outside the popup
+                $(document).on('mouseup', function (e) {
+                    let container = $(Config.EX_COTAINER);
+
+                    if (!container.is(e.target) && container.has(e.target).length === 0) {
+                        closePopup();
+                    }
+                });
+
+                // hide the switcher on blurring of input
+                $(document).on('click', Config.EX_BTN_CANCEL, function () {
+                    closePopup();
+                });
+
+                // master key binding for which extension will be enabled
                 key(Config.MASTER_KEY, function () {
-                    showTabSwitcher();
+                    showPopUp();
                     $(Config.EX_INPUT_TITLE).focus();
 
                     // get the active tab
@@ -301,7 +361,7 @@
 
     $(document).ready(function () {
         var likeOnGithub = new LikeOnGithub();
-        likeOnGithub.loadExtension(Config.EX_CONTAINER);
+        likeOnGithub.loadExtension(Config.EX_CONTAINER_BODY);
     });
 
 })();
