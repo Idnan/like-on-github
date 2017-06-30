@@ -19,7 +19,7 @@ function Options() {
      * @param value
      * @returns {boolean}
      */
-    const get = value => localStorage.getItem(value) ? localStorage.getItem(value) : false
+    const get = value => localStorage.getItem(value) ? localStorage.getItem(value) : false;
 
 
     const fields = ['token', 'path', 'committer_name', 'committer_email', 'repo', 'owner'],
@@ -31,18 +31,18 @@ function Options() {
     let bindUI = function () {
 
         fields.filter(item => get(item) !== false)
-            .forEach(item => document.getElementById(item).value = get(item))
+            .forEach(item => document.getElementById(item).value = get(item));
 
-        let save_btn = document.getElementsByClassName('btn-save')[0]
+        let save_btn = document.getElementsByClassName('btn-save')[0];
 
         save_btn.onclick = event => {
             event.preventDefault();
 
             fields.forEach(item => {
-                const value = document.getElementById(item).value.trim()
+                const value = document.getElementById(item).value.trim();
                 if (value.length)
                     save(item, value);
-            })
+            });
 
             let heading = document.getElementsByClassName('quote-item')[0];
             heading.innerHTML = 'Woohoo! Setting saved'

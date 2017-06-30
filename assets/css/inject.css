@@ -1,0 +1,114 @@
+
+.logh {
+    display: none;
+    font: 400 .875em/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
+    padding: 15px 20px;
+    position: fixed;
+    top: 2vh;
+    right: 2vh;
+    width: 22vw;
+    color: #1d2129;
+    background-color: rgb(250, 250, 250);
+    box-shadow: rgba(102, 96, 91, 0.7) 0px 0px 12px;
+    box-sizing: border-box;
+    z-index: 9999999;
+    text-rendering: optimizeLegibility;
+    border: 1px solid rgb(229, 229, 229);
+    border-image: initial;
+    outline: none;
+    letter-spacing: -0.02em;
+}
+
+.logh h3 {
+    border-bottom: 1px dashed rgb(223, 226, 229);
+    padding-bottom: 8px;
+    margin: 0px 0px 12px;
+    color: #1d2129;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.logh .clogl input[type='text'] {
+    color: #1d2129;
+    width: 95%;
+    margin-bottom: 18px;
+    min-height: 24px;
+    font-size: 14px;
+    line-height: 20px;
+    vertical-align: middle;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(27, 31, 35, 0.075) 0px 1px 2px inset;
+    padding: 6px 8px;
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(209, 213, 218);
+    border-image: initial;
+    border-radius: 3px;
+    outline: none;
+}
+
+.logh .clogl textarea {
+    max-width: 95%;
+    margin: 0px 0px 18px;
+    min-height: 24px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1d2129;
+    vertical-align: middle;
+    box-shadow: rgba(27, 31, 35, 0.075) 0px 1px 2px inset;
+    padding: 6px 8px;
+    background: rgb(255, 255, 255) no-repeat right 8px center;
+    border: 1px solid rgb(209, 213, 218);
+    border-radius: 3px;
+    outline: none;
+    height: 75px;
+    width: 95%;
+
+}
+
+.logh .clogl .lbllogh {
+    font-weight: normal;
+    display: block;
+    color: #1d2129;
+    font-size: 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.logh #action-btns .btn {
+    color: #1d2129;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 12px;
+    background: rgb(239, 243, 246);
+    border: 1px solid rgba(27, 31, 35, 0.2);
+    border-image: initial;
+    border-radius: 0.25em;
+    outline: none;
+    box-shadow: none;
+}
+
+.logh #action-btns .btn-primary {
+    color: rgb(255, 255, 255);
+    background: rgb(40, 167, 69);
+}
+
+.logh #action-btns .btn-primary:hover {
+    background-color: #397d49 !important;
+}
+
+.logh #action-btns .btn:hover {
+    background: #e6ebf1;
+}
+
+.logh #action-btns div.btn {
+    margin-right: 12px;
+}
