@@ -8,6 +8,89 @@
  */
 (function () {
 
+    var Helper = {
+
+        /**
+         * Hides the log on github popup
+         */
+        closePopup: function () {
+
+            let $container = $(Config.EX_COTAINER);
+
+            if ($container.length === 0) {
+                return false;
+            }
+
+            Helper.resetPopupHtml();
+
+            $(Config.EX_COTAINER).hide();
+            $(Config.EX_INPUT_TITLE).val('');
+            $(Config.EX_INPUT_URL).val('');
+            $(Config.EX_INPUT_COMMENT).val('');
+
+            return true;
+        },
+
+        /**
+         * Gets the tab switcher element and makes it visible. If it cannot find the element creates it.
+         */
+        showPopup: function () {
+            let $container = $(Config.EX_COTAINER);
+
+            // Some pages remove the tab switcher HTML by chance
+            // so we check if the tab switcher was found and we re append if it is not found
+            if ($container.length === 0) {
+                appendLikeOnGithubHtml(Config.EX_CONTAINER_BODY);
+                $container = $(Config.EX_COTAINER);
+            }
+
+            $container.show();
+        },
+
+        /**
+         * Reset the html of the popup
+         */
+        resetPopupHtml: function () {
+
+            $(Config.EX_BTN_SAVE).text('Save');
+
+            $(Config.EX_ERROR_CONTAINER).hide();
+            $(Config.EX_ERROR_LINE).html('');
+        },
+
+        /**
+         * Validate the form fields
+         */
+        isFormValid: function () {
+
+            let title = $(Config.EX_INPUT_TITLE).val().trim(),
+                comment = $(Config.EX_INPUT_COMMENT).val().trim();
+
+            return !!(title && comment);
+        },
+    };
+
+    var Storage = {
+
+        /**
+         * Get value from storage
+         *
+         * @returns {string}
+         * @param callback
+         */
+        getRepoUrl: function (callback) {
+
+            chrome.extension.sendMessage({
+                type: 'getStorage',
+                params: {
+                    keys: ['owner', 'repo', 'path', 'token', 'committer_name', 'committer_email']
+                }
+            }, function (res) {
+                callback(res);
+            });
+        },
+    };
+
     /**
      * Configuration constants for the extension
      *
@@ -19,19 +102,22 @@
         MAIN_TEMPLATE: '<div class="logh">' +
         '<h3>Like On Github</h3>' +
         '<div class="clogl">' +
-        '<div class="lbllogh">Title (label for the link)</div>' +
+        '<div class="lbllogh"><span class="reqlogh">*</span>Title (label for the link)</div>' +
         '<input type="text" name="title">' +
         '</div>' +
         '<div class="clogl">' +
         '<input type="hidden" name="url">' +
         '</div>' +
         '<div class="clogl">' +
-        '<div class="lbllogh">Comment (commit message)</div>' +
+        '<div class="lbllogh"><span class="reqlogh">*</span>Comment (commit message)</div>' +
         '<textarea name="comment"></textarea>' +
         '</div>' +
         '<div id="action-btns">' +
         '<div class="btn btn-primary" id="logh_btn_save">Save</div>' +
         '<div class="btn" id="logh_btn_cancel">Cancel</div>' +
+        '</div>' +
+        '<div class="elogh hlogh">' +
+        '<p></p>' +
         '</div>' +
         '</div>',
 
@@ -43,25 +129,17 @@
         EX_CONTAINER_BODY: 'body',
         EX_BTN_SAVE: '.logh #logh_btn_save',
         EX_BTN_CANCEL: '.logh #logh_btn_cancel',
+        EX_ERROR_CONTAINER: '.logh .elogh',
+        EX_ERROR_LINE: '.logh .elogh p',
 
         // Shortcut for activation
         MASTER_KEY: '⌘+⇧+l, ⌃+⇧+l',
 
         // Key codes for certain actions
         ESCAPE_KEY: 27,
-    };
 
-    var Storage = {
-
-        /**
-         * Get value from storage
-         *
-         * @param val
-         * @returns {string}
-         */
-        get: function (val) {
-            return localStorage.getItem(val) ? localStorage.getItem(val) : '';
-        },
+        // REPO
+        BASE_URL: 'https://api.github.com/repos',
     };
 
     /**
@@ -101,46 +179,86 @@
 
     var Repo = {
 
-        // fetch(url)
-        //     .then(response => response.json())
-        //     .then(response => {
-        //         let sha = response.sha,
-        //             encodedContent = response.content,
-        //             decodedContent = decodeURIComponent(escape(window.atob(encodedContent)));
-        //
-        //         // If the file is empty
-        //         if (decodedContent.trim().length === 0)
-        //             decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n';
-        //
-        //         // append header
-        //         if (!isCurrentDateExists(decodedContent))
-        //             decodedContent += getDateHeader();
-        //
-        //         // append url
-        //         decodedContent += `- [${activeTab.title}](${activeTab.url}) \n`;
-        //
-        //         // decode content
-        //         encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
-        //
-        //         // prepare commit
-        //         return {
-        //             sha: sha,
-        //             content: encodedContent,
-        //             message: `New link: ${activeTab.title}`,
-        //             committer: {
-        //                 'name': get('committer_name'),
-        //                 'email': get('committer_email')
-        //             }
-        //         }
-        //     }).then(commit => fetch(url, {
-        //         method: 'PUT',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(commit)
-        //     }))
-        //     .then(success => setSuccessIcon())
-        //     .catch(error => setErrorIcon());
+        commitLike: function (items) {
+
+            let repoUrl = `${Config.BASE_URL}/${items['owner']}/${items['repo']}/contents/${items['path']}?access_token=${items['token']}`;
+
+            if (!repoUrl) {
+                return false;
+            }
+
+            let activeTabTitle = $(Config.EX_INPUT_TITLE).val(),
+                activeTabUrl = $(Config.EX_INPUT_URL).val(),
+                commitMessage = $(Config.EX_INPUT_COMMENT).val();
+
+            fetch(repoUrl)
+                .then(response => response.json())
+                .then(response => {
+
+                    let sha = response.sha,
+                        encodedContent = response.content,
+                        decodedContent = decodeURIComponent(escape(window.atob(encodedContent)));
+
+                    // If the file is empty
+                    if (decodedContent.trim().length === 0)
+                        decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n';
+
+                    // append header
+                    if (!Repo.isCurrentDateExists(decodedContent))
+                        decodedContent += Repo.getDateHeader();
+
+                    // append url
+                    decodedContent += `- [${activeTabTitle}](${activeTabUrl}) \n`;
+
+                    // decode content
+                    encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
+
+                    // prepare commit
+                    return {
+                        sha: sha,
+                        content: encodedContent,
+                        message: commitMessage,
+                        committer: {
+                            'name': items['committer_name'],
+                            'email': items['committer_email']
+                        }
+                    }
+                })
+                .then(commit => fetch(repoUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(commit)
+                }))
+                .then(success => {
+
+                    $(Config.EX_BTN_SAVE).text('Save');
+
+                    success.json().then((res) => {
+
+                        $(Config.EX_ERROR_CONTAINER).show();
+
+                        let message = '';
+                        if (success.status && success.status === 200) {
+                            message = 'Link pushed: <a href="' + res.commit.html_url + '" target="_blank">Click</a> (Popup will auto close after 5 secs)';
+
+                            // close the popup after 5 secs
+                            setTimeout(function () {
+                                Helper.closePopup();
+                            }, 5000);
+                        } else {
+                            message = res.message;
+                        }
+
+                        $(Config.EX_ERROR_LINE).html(message);
+                        $(Config.EX_BTN_SAVE).removeClass('saving');
+                    });
+                })
+                .catch(error => {
+                    $(Config.EX_BTN_SAVE).removeClass('saving').text('Save');
+                });
+        },
 
         /**
          * Return date header
@@ -148,7 +266,7 @@
          * @returns {string}
          */
         getDateHeader: function () {
-            return `\n### ${getCurrentDate()} \n`;
+            return `\n### ${Repo.getCurrentDate()} \n`;
         },
 
         /**
@@ -158,7 +276,7 @@
          * @returns {boolean}
          */
         isCurrentDateExists: function (content) {
-            return (content.indexOf(getCurrentDate()) !== -1);
+            return (content.indexOf(Repo.getCurrentDate()) !== -1);
         },
 
         /**
@@ -168,7 +286,7 @@
          */
         getCurrentDate: function () {
             const date = new Date();
-            return `${monthNames()[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+            return `${Repo.monthNames()[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
         },
 
         /**
@@ -182,49 +300,6 @@
                 'July', 'August', 'September', 'October', 'November', 'December'
             ];
         },
-
-        /**
-         * Pad 0 if number is less than 10
-         *
-         * @param n
-         * @returns {string}
-         */
-        pad: function (n) {
-            return (n < 10) ? ('0' + n) : n;
-        },
-
-        /**
-         * Set default icon
-         */
-        setDefaultIcon: function () {
-            sleep(1000).then(() => chrome.browserAction.setIcon({path: 'icons/standard-16.png'}));
-        },
-
-        /**
-         * Set success icon
-         */
-        setSuccessIcon: function () {
-            chrome.browserAction.setIcon({path: 'icons/check-mark.png'});
-            setDefaultIcon();
-        },
-
-        /**
-         * Set error icon
-         */
-        setErrorIcon: function () {
-            chrome.browserAction.setIcon({path: 'icons/cross-mark.png'});
-            setDefaultIcon();
-        },
-
-        /**
-         * Sleep execution
-         *
-         * @param time
-         * @returns {boolean}
-         */
-        sleep: function (time) {
-            return new Promise((resolve) => setTimeout(resolve, time));
-        },
     };
 
     /**
@@ -234,21 +309,6 @@
      * @constructor
      */
     function LikeOnGithub() {
-
-        /**
-         * Gets the action to be performed for the given keycode
-         *
-         * @param keyCode
-         * @returns {*}
-         */
-        function getAction(keyCode) {
-            switch (keyCode) {
-                case Config.ESCAPE_KEY:
-                    return Config.ESCAPING;
-                default:
-                    return false;
-            }
-        }
 
         /**
          * Appends the tab switcher HTML to the $container
@@ -263,41 +323,6 @@
 
             $container.append(Config.MAIN_TEMPLATE);
             return $container;
-        }
-
-        /**
-         * Hides the log on github popup
-         */
-        function closePopup() {
-
-            let $container = $(Config.EX_COTAINER);
-
-            if ($container.length === 0) {
-                return false;
-            }
-
-            $(Config.EX_COTAINER).hide();
-            $(Config.EX_INPUT_TITLE).val('');
-            $(Config.EX_INPUT_URL).val('');
-            $(Config.EX_INPUT_COMMENT).val('');
-
-            return true;
-        }
-
-        /**
-         * Gets the tab switcher element and makes it visible. If it cannot find the element creates it.
-         */
-        function showPopUp() {
-            let $container = $(Config.EX_COTAINER);
-
-            // Some pages remove the tab switcher HTML by chance
-            // so we check if the tab switcher was found and we re append if it is not found
-            if ($container.length === 0) {
-                appendLikeOnGithubHtml(Config.EX_CONTAINER_BODY);
-                $container = $(Config.EX_COTAINER);
-            }
-
-            $container.show();
         }
 
         return {
@@ -320,7 +345,7 @@
                 // close on escape key
                 $(document).on('keyup', function (e) {
                     if (e.keyCode === Config.ESCAPE_KEY) {
-                        closePopup();
+                        Helper.closePopup();
                     }
                 });
 
@@ -329,18 +354,41 @@
                     let container = $(Config.EX_COTAINER);
 
                     if (!container.is(e.target) && container.has(e.target).length === 0) {
-                        closePopup();
+                        Helper.closePopup();
                     }
                 });
 
                 // hide the switcher on blurring of input
                 $(document).on('click', Config.EX_BTN_CANCEL, function () {
-                    closePopup();
+                    Helper.closePopup();
+                });
+
+                // hide the switcher on blurring of input
+                $(document).on('click', Config.EX_BTN_SAVE, function () {
+
+                    let saveBtn = $(Config.EX_BTN_SAVE);
+
+                    if (saveBtn.hasClass('saving') || !Helper.isFormValid()) {
+                        return false;
+                    }
+
+                    Helper.resetPopupHtml();
+
+                    saveBtn.addClass('saving').text('Saving...');
+
+                    Storage.getRepoUrl(function (items) {
+
+                        // commit the like
+                        if (items) {
+                            Repo.commitLike(items);
+                        }
+                    });
                 });
 
                 // master key binding for which extension will be enabled
                 key(Config.MASTER_KEY, function () {
-                    showPopUp();
+                    Helper.showPopup();
+
                     $(Config.EX_INPUT_TITLE).focus();
 
                     // get the active tab

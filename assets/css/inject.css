@@ -112,3 +112,37 @@
 .logh #action-btns div.btn {
     margin-right: 12px;
 }
+
+.logh .hlogh {
+    display: none;
+}
+
+.logh .elogh {
+    margin-top: 20px;
+    background: #fffdef;
+    padding: 10px 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+}
+
+.logh .elogh p {
+    margin: 0px;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(29, 33, 41);
+    text-decoration: none;
+    font-weight: normal;
+    padding: 0px;
+}
+
+.logh .elogh p a {
+    color: #0366d6;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logh .reqlogh {
+    color: #1d2129;
+    margin-right: 2px;
+    font-weight: bold;
+}

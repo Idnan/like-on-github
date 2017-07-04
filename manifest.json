@@ -16,6 +16,7 @@
         "128": "assets/icons/standard-128.png"
     },
     "permissions": [
+        "storage",
         "tabs",
         "http://*/*",
         "https://*/*"

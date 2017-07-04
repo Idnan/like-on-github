@@ -17,10 +17,28 @@ chrome.runtime.onMessage.addListener(function (req, sender, sendResponse) {
 
             return true;
         },
+
+        /**
+         * Get active tab
+         *
+         * @returns {boolean}
+         */
+        getStorage: function (params) {
+
+            chrome.storage.sync.get(params.keys, function (items) {
+                sendResponse(items);
+            });
+
+            return true;
+        },
     };
 
     return handler[req.type](req.params);
 
+});
+
+chrome.browserAction.onClicked.addListener(function (tab) {
+    // @todo open the like on github window
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
