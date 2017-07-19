@@ -1,4 +1,4 @@
-# Like on Git
+# Like on Github
 > Chrome extension to save links that you like on Github repository that you specify
 
 It makes it seem-less to create "today-i-read" repository where you put all the links that you read or liked. Just click a button and the link will be committed to your repository under the current date.
@@ -15,19 +15,19 @@ It makes it seem-less to create "today-i-read" repository where you put all the 
 - Right click the extension icon (thumb icon) in the bar and click the options page
 - At the options page, add the specified details
 
-  ![Options Page](http://i.imgur.com/0cdkfKx.png)
+  ![Options Page](http://i.imgur.com/a8grypPr.png)
 
 - Make sure to select the `repo` option while generating token.
 
-  ![Generate Token Page](http://i.imgur.com/QJB9HGA.png)
+  ![Generate Token Page](http://i.imgur.com/eDAJDazr.png)
 
 - Voila! You are all set.
 
 ## How to Use
 
-#### Click the "Thumb" button on any page that you like
+#### Press Cmd + Shift + L and a window will open where you can edit the link title and commit message. After verify the title/message click save and link will be saved in your github repository.
 
-![How to Use](http://i.imgur.com/Yczjy7e.png)
+![How to Use](http://i.imgur.com/hUC9ed8r.png)
 
 #### Liked content will be there in your linked repository
 
