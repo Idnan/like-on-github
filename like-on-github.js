@@ -164,7 +164,7 @@
                 callback(activeTab);
             }
 
-            chrome.extension.sendMessage({type: 'getActiveTab'}, function (tab) {
+            chrome.extension.sendMessage({ type: 'getActiveTab' }, function (tab) {
 
                 if (!tab) {
                     return false;
@@ -199,16 +199,10 @@
                         encodedContent = response.content,
                         decodedContent = decodeURIComponent(escape(window.atob(encodedContent)));
 
-                    // If the file is empty
-                    if (decodedContent.trim().length === 0)
-                        decodedContent += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n';
+                    const dataToAppend = `- [${activeTabTitle}](${activeTabUrl}) \n`;
 
-                    // append header
-                    if (!Repo.isCurrentDateExists(decodedContent))
-                        decodedContent += Repo.getDateHeader();
-
-                    // append url
-                    decodedContent += `- [${activeTabTitle}](${activeTabUrl}) \n`;
+                    // append data in the front
+                    decodedContent = Repo.appendDataBefore(dataToAppend, decodedContent);
 
                     // decode content
                     encodedContent = window.btoa(unescape(encodeURIComponent(decodedContent)));
@@ -258,6 +252,34 @@
                 .catch(error => {
                     $(Config.EX_BTN_SAVE).removeClass('saving').text('Save');
                 });
+        },
+
+        /**
+         * Append data in the front
+         * @param dataToAppend
+         * @param content
+         * @returns {String}
+         */
+        appendDataBefore: function (dataToAppend, content) {
+            // If the file is empty
+            if (content.trim().length === 0) {
+                content += '# today-i-liked \nContent that I liked. Saved using https://goo.gl/Wj595G \n';
+            }
+            const arr = content.split('###');
+            // if the length of arr is 1, then it is the first time to append data
+            if (arr.length === 1) {
+                arr[0] += Repo.getDateHeader();
+                arr[0] += dataToAppend;
+                content = arr.join('');
+            } else {
+                // if has not append data of currentDate, then append DateHeader
+                if (!Repo.isCurrentDateExists(content)) {
+                    arr[0] += Repo.getDateHeader();
+                }
+                arr[1] += dataToAppend;
+                content = arr.join('###');
+            }
+            return content;
         },
 
         /**
