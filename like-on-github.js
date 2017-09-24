@@ -164,7 +164,7 @@
                 callback(activeTab);
             }
 
-            chrome.extension.sendMessage({ type: 'getActiveTab' }, function (tab) {
+            chrome.extension.sendMessage({type: 'getActiveTab'}, function (tab) {
 
                 if (!tab) {
                     return false;
@@ -275,8 +275,10 @@
                 // if has not append data of currentDate, then append DateHeader
                 if (!Repo.isCurrentDateExists(content)) {
                     arr[0] += Repo.getDateHeader();
+                    arr[0] += dataToAppend;
+                } else {    // if already have date then append to that
+                    arr[1] += dataToAppend;
                 }
-                arr[1] += dataToAppend;
                 content = arr.join('###');
             }
             return content;
