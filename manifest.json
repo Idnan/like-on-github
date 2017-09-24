@@ -1,6 +1,6 @@
 {
-    "name": "Like on Github",
-    "short_name": "LikeOnGithub",
+    "name": "Like on GitHub",
+    "short_name": "LikeOnGitHub",
     "description": "Use this extension to save your links to your GitHub repo.",
     "version": "2.0.0",
     "background": {
@@ -22,7 +22,7 @@
         "https://*/*"
     ],
     "browser_action": {
-        "default_title": "Like on Github",
+        "default_title": "Like on GitHub",
         "default_icon": "assets/icons/standard-16.png"
     },
     "manifest_version": 2,

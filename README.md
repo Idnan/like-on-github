@@ -1,5 +1,5 @@
-# Like on Github
-> Chrome extension to save links that you like on Github repository that you specify
+# Like on GitHub
+> Chrome extension to save links that you like on GitHub repository that you specify
 
 It makes it seem-less to create "today-i-read" repository where you put all the links that you read or liked. Just click a button and the link will be committed to your repository under the current date.
 
@@ -25,7 +25,7 @@ It makes it seem-less to create "today-i-read" repository where you put all the 
 
 ## How to Use
 
-#### Press Cmd + Shift + L and a window will open where you can edit the link title and commit message. After verify the title/message click save and link will be saved in your github repository.
+#### Press Cmd + Shift + L and a window will open where you can edit the link title and commit message. After verify the title/message click save and link will be saved in your GitHub repository.
 
 ![How to Use](http://i.imgur.com/hUC9ed8r.png)
 

@@ -1,7 +1,7 @@
 /**
  * LikeOnGitHub
  *
- * This file is part of the LikeOnGithub; an opensource Google Chrome extension
+ * This file is part of the LikeOnGitHub; an opensource Google Chrome extension
  * http://github.com/idnan/like-on-github
  *
  * MIT (c) Adnan Ahmed <mahradnan@hotmail.com>
@@ -100,7 +100,7 @@
 
         // Templates
         MAIN_TEMPLATE: '<div class="logh">' +
-        '<h3>Like On Github</h3>' +
+        '<h3>Like On GitHub</h3>' +
         '<div class="clogl">' +
         '<div class="lbllogh"><span class="reqlogh">*</span>Title (label for the link)</div>' +
         '<input type="text" name="title">' +
