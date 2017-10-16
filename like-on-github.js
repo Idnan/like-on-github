@@ -26,6 +26,7 @@
             $(Config.EX_COTAINER).hide();
             $(Config.EX_INPUT_TITLE).val('');
             $(Config.EX_INPUT_URL).val('');
+            $(Config.EX_INPUT_NOTES).val('');
             $(Config.EX_INPUT_COMMENT).val('');
 
             return true;
@@ -109,6 +110,10 @@
         '<input type="hidden" name="url">' +
         '</div>' +
         '<div class="clogl">' +
+        '<div class="lbllogh">Notes</div>' +
+        '<textarea name="notes"></textarea>' +
+        '</div>' +
+        '<div class="clogl">' +
         '<div class="lbllogh"><span class="reqlogh">*</span>Comment (commit message)</div>' +
         '<textarea name="comment"></textarea>' +
         '</div>' +
@@ -125,6 +130,7 @@
         EX_COTAINER: '.logh',
         EX_INPUT_TITLE: '.logh input[name="title"]',
         EX_INPUT_URL: '.logh input[name="url"]',
+        EX_INPUT_NOTES: '.logh textarea[name="notes"]',
         EX_INPUT_COMMENT: '.logh textarea[name="comment"]',
         EX_CONTAINER_BODY: 'body',
         EX_BTN_SAVE: '.logh #logh_btn_save',
@@ -189,6 +195,7 @@
 
             let activeTabTitle = $(Config.EX_INPUT_TITLE).val(),
                 activeTabUrl = $(Config.EX_INPUT_URL).val(),
+                userNotes = $(Config.EX_INPUT_NOTES).val(),
                 commitMessage = $(Config.EX_INPUT_COMMENT).val();
 
             fetch(repoUrl)
@@ -199,7 +206,7 @@
                         encodedContent = response.content,
                         decodedContent = decodeURIComponent(escape(window.atob(encodedContent)));
 
-                    const dataToAppend = `- [${activeTabTitle}](${activeTabUrl}) \n`;
+                    const dataToAppend = `- [${activeTabTitle}](${activeTabUrl}) ${userNotes}\n`;
 
                     // append data in the front
                     decodedContent = Repo.appendDataBefore(dataToAppend, decodedContent);
