@@ -284,7 +284,7 @@
                     arr[0] += Repo.getDateHeader();
                     arr[0] += dataToAppend;
                 } else {    // if already have date then append to that
-                    arr[1] += dataToAppend;
+                    arr[arr.length - 1] += dataToAppend;
                 }
                 content = arr.join('###');
             }
@@ -297,7 +297,7 @@
          * @returns {string}
          */
         getDateHeader: function () {
-            return `\n### ${Repo.getCurrentDate()} \n`;
+            return `\n### ${Repo.getCurrentDate()}\n`;
         },
 
         /**
