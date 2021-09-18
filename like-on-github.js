@@ -181,7 +181,8 @@
 
         commitLike: function (items) {
 
-            let repoUrl = `${Config.BASE_URL}/${items['owner']}/${items['repo']}/contents/${items['path']}?access_token=${items['token']}`;
+            let repoUrl = `${Config.BASE_URL}/${items['owner']}/${items['repo']}/contents/${items['path']}`;
+            let auth = { Authorization: `token ${ items['token'] }` }
 
             if (!repoUrl) {
                 return false;
@@ -191,7 +192,7 @@
                 activeTabUrl = $(Config.EX_INPUT_URL).val(),
                 commitMessage = $(Config.EX_INPUT_COMMENT).val();
 
-            fetch(repoUrl)
+            fetch(repoUrl, { headers: auth })
                 .then(response => response.json())
                 .then(response => {
 
@@ -221,7 +222,8 @@
                 .then(commit => fetch(repoUrl, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        ...auth
                     },
                     body: JSON.stringify(commit)
                 }))
